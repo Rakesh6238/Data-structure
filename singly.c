@@ -2,191 +2,264 @@
 #include<stdlib.h>
 struct node
 {
-int data;
-struct node*next;
+   int data;
+   struct node *next;
 };
-struct node*head;
-void beginsert()
-{
-struct node*newnode;
-int x;
-newnode=(struct node*)malloc(sizeof(struct node*));
-printf("\n enter data:");
-scanf("%d",&x);
-if(head==NULL)
-{
-newnode->data=x;
-newnode->next=NULL;
-head=newnode;
-}
-else
-{
-newnode->data=x;
-newnode->next=head;
-head=newnode;
-}
-}
-void lastinsert()
-{
-struct node*newnode,*temp;
-int x;
-newnode=(struct node*)malloc(sizeof(struct node*));
-printf("\n enter data:");
-scanf("%d",&x);
-newnode->data=x;
-if(head==NULL)
-{
-newnode->next=NULL;
-head=newnode;
-}
-else
-{
-temp=head;
-while(temp->next!=NULL)
-{
-temp=temp->next;
-}
-temp->next=newnode;
-newnode->next=NULL;
-}
-}
-void posdel()
-{
-struct node*newnode,*prev;
-int pos,i,x;
-newnode=head;
-if(newnode==NULL)
-{
-printf("\n the list is empty");
-}
-else
-{
-printf("\n enter the position");
-scanf("%d",&pos);
-if(pos==1)
-{
-newnode=head;
-head=newnode->next;
-x=newnode->data;
-free(newnode);
-printf("\n %d is deleted",x);
-}
-else
-{
-for(i=1;i<pos;i++)
-{
-prev=newnode;
-newnode=newnode->next;
-if(newnode==NULL)
-{
-printf("\n can't delete");
-return;
-}
-}
-prev->next=newnode->next;
-x=newnode->data;
-free(newnode);
-printf("\n %d is deleted",x);
-}
-}
-}
+struct node *head,*ptr;
 
-void search()
-{
-    struct node*ptr;
-    int val;
-    printf("\n enter the value to be searched");
-    scanf("%d",&val);
-    if(head==NULL)
-    {
-        printf("\nEmpty List\n");
-    }
-    else
-    {
-        ptr=head;
-        if(ptr->next!=NULL)
-        {
-            if(ptr->data==val)
-            {
-                printf("Item Found in List");
-               
-            }
-            else
-            {
-                printf("Do not Find Item");
-               
-            }
-            ptr=ptr->next;
-        }
-    }
-}
+void insBeg(int);
+void insLast(int);
+void insBet(int,int);
+void delBeg();
+void delLast();
+void delBet(int);
+void search(int);
+void display();
 
-void display()
+void main()
 {
-struct node*ptr;
+   int op,ele,key,val,ne;
+   do
+   {
+       printf("\n1.Insert Beginning\n2.Insert Last\n3.Insert Between\n4.Delete Beginning\n5.Delete Last\n6.Delete Specified\n7.Search\n8.Display\n9.Exit\nChoose An Option:\n");
+       scanf("%d",&op);
+       switch(op)
+       {
+           case 1:
+               printf("Enter Element To Insert:\n");
+               scanf("%d",&ele);
+               insBeg(ele);
+               break;
+           case 2:
+               printf("Enter Element To Insert:\n");
+               scanf("%d",&ele);
+               insLast(ele);
+               break;
+           case 3:
+               printf("Enter Element To Insert:\n");
+               scanf("%d",&ele);
+               printf("Enter Element to Insert After:\n");
+               scanf("%d",&ne);
+               insBet(ele,ne);
+               break;
+           case 4:
+               delBeg();
+               break;
+           case 5:
+               delLast();
+               break;
+           case 6:
+               printf("Enter Element To Delete:\n");
+               scanf("%d",&key);
+               delBet(key);
+               break;
+           case 7:
+               printf("Enter Element To Search:\n");
+               scanf("%d",&val);
+               search(val);
+               break;
+           case 8:
+               display();
+               break;
+           case 9:
+               exit(0);
+       }
+
+   }
+   while(op!=9);
+}
+void insBeg(int ele)
+{
+   struct node *new;
+   new=(struct node *)malloc(sizeof(struct node));
+   if(new==NULL)
+   {
+       printf("\nInsuffitient Memory\n");
+   }
+   else
+   {
+       if(head==NULL)
+       {
+           new->next=NULL;
+           new->data=ele;
+           head=new;
+       }
+       else
+       {
+           ptr=head;
+           new->data=ele;
+           new->next=ptr;
+           head=new;
+       }
+       printf("Insertion Successfull");
+   }
+}
+void insLast(int ele)
+{
+   struct node *new;
+   new=(struct node *)malloc(sizeof(struct node));
+   if(new==NULL)
+   {
+       printf("\nInsuffitient Memory\n");
+   }
+   else
+   {
+       if(head==NULL)
+       {
+           new->next=NULL;
+           new->data=ele;
+           head=new;
+       }
+       else
+       {
+           ptr=head;
+           while(ptr->next!=NULL)
+           {
+               ptr=ptr->next;
+           }
+           new->data=ele;
+           new->next=NULL;
+           ptr->next=new;
+       }
+       printf("Insertion Successfull");
+   }
+}
+void insBet(int ele,int ne)
+{
+   struct node *new;
+   new=(struct node *)malloc(sizeof(struct node));
+   if(new==NULL)
+   {
+       printf("\nInsuffitient Memory\n");
+   }
+   else
+   {
+       if(head==NULL)
+       {
+           new->next=NULL;
+           new->data=ele;
+           head=new;
+       }
+       else
+       {
+           ptr=head;
+           while(ptr->data!=ne)
+           {
+               ptr=ptr->next;
+           }
+           new->data=ele;
+           new->next=ptr->next;
+           ptr->next=new;
+       }
+       printf("Insertion Successfull");
+   }
+}
+void delBeg()
+{
+   if(head==NULL)
+   {
+       printf("\nUNDERFLOW\n");
+   }
+   else if(head->next==NULL)
+   {
+       head=NULL;
+       free(head);
+   }
+   else
+   {
+       ptr=head->next;
+       head=ptr;
+   }
+}
+void delLast()
+{
+   if(head==NULL)
+   {
+       printf("\nUNDERFLOW\n");
+   }
+   else if(head->next==NULL)
+   {
+       head=NULL;
+       free(head);
+   }
+   else
+   {
+       ptr=head;
+       while(ptr->next->next!=NULL)
+       {
+           ptr=ptr->next;
+       }
+       ptr->next=NULL;
+       free(ptr->next);
+   }
+}
+void delBet(int key)
+{
+   if(head==NULL)
+   {
+       printf("\nUNDERFLOW\n");
+   }
+   else if(head->next==NULL)
+   {
+       head=NULL;
+       free(head);
+   }
+else if(head->data==key)
+{
+delBeg();
+}
+   else
+   {
+       ptr=head;
+       while(ptr->next->data!=key)
+       {
+           ptr=ptr->next;
+       }
+ptr->next=ptr->next->next;
+   }
+}
+void search(int val)
+{
+struct node *ptr;
+int flag=0;
 ptr=head;
-if(ptr==NULL)
+   if(head==NULL)
 {
-printf("list is");
+printf("\nEmpty List\n");
 }
 else
 {
 while(ptr!=NULL)
 {
-printf("%d->",ptr->data);
+if(ptr->data==val)
+{
+printf("\nItem Found\n");
+flag=1;
+}
 ptr=ptr->next;
 }
-printf("null");
-}
-}
-void main()
+if(flag==0)
 {
-
-
- int opt;
-
- do
-
-  {
-
-   printf("\nEnter your choice:\n1. Insert at beginning\n2.Insert at end \n3.delete at position \n4.search \n5.display");
-
-   scanf("%d",&opt);
-
-   switch (opt)
-
-   {
-
-    case 1:beginsert();
-
-           break;
-
-   
-
-    case 2:lastinsert();
-
-           break;
-  
-    case 3:posdel();
-
-           break;
-  
-    case 4:search();
-
-           break;
-   
-    case 5:display();
-
-           break;
-
-
-   
-    default:printf("invalid choose");
-
-   }
-
-  }
-
- while(opt!=6);
-
+printf("\nItem Not Found\n");
 }
+}
+}
+void display()
+{
+   if(head==NULL)
+   {
+       printf("\nEmpty List\n");
+   }
+   else
+   {
+       ptr=head;
+       printf("Elements Are:\n");
+       while(ptr!=NULL)
+       {
+           printf("%d\n",ptr->data);
+           ptr=ptr->next;
+       }
+   }
+}
+
+
